@@ -14,14 +14,6 @@ def print_attribute_names_and_values(instance, attribute_names):
     print (attribute_names[i], '=', attribute_value(instance, attribute_names[i], attribute_names))
 
 
-def load_instances(filename):
-  
-  instances = []
-  with open(filename, 'r') as f:
-    for line in f:
-      instances.append(line.strip().split(','))
-  
-  return instances
 
 
 def load_clean_instances(filename):
@@ -34,8 +26,21 @@ def load_clean_instances(filename):
 		max = 0
 		for line in lineIter:
 			entry = line.strip().split(',')
-			entry[0] = int(float(entry[0]))
-			raw_instances.append(entry)
+			rounded_entries = []
+			rounded_entries.append(int(float(entry[0])))
+
+
+			entryIter = iter(entry)
+			next(entryIter)
+			for e in entryIter:
+				round = int(float(e))
+				#print round
+				if round > 0:
+					rounded_entries.append("b")
+				else:
+					rounded_entries.append("s")
+		
+			raw_instances.append(rounded_entries)
 			max = max + 1
 			if max == 10000:
 				break
@@ -72,7 +77,6 @@ def print_all_attribute_value_counts(instances, attribute_names):
             print (value,':', v_counts[value])
 
 
-clean_instances = load_clean_instances('../HIGGS.csv')
 
 
 import operator
@@ -134,7 +138,7 @@ def choose_best_attribute_index(instances, candidate_attribute_indexes, class_in
 def majority_value(instances, class_index=0):
   partitions = split_instances(instances, class_index)
   max = 0
-  for val in (0,1):   # should look up these values based on class_index using attribute_names_and_values
+  for val in ("b","s"):   # should look up these values based on class_index using attribute_names_and_values
     n = len(partitions[val])
     if n >= max:
       max = n
@@ -214,7 +218,9 @@ def create_decision_tree(instances, candidate_attribute_indexes=None, class_inde
 
     return tree
 
+clean_instances = load_clean_instances('../HIGGS.csv')
+
 # split instances into separate training and testing sets
-training_instances = clean_instances[:-2000]
+training_instances = clean_instances[:-500]
 tree = create_decision_tree(training_instances, trace=1) # remove trace=1 to turn off tracing
             
