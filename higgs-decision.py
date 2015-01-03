@@ -16,20 +16,19 @@ def print_attribute_names_and_values(instance, attribute_names):
 
 
 
-def load_clean_instances(filename):
+def load_higgs_instances(filename):
   
-	raw_instances = []
+	instanceList = []
 
 	with open(filename, 'r') as f:
-		# use iterator to skip the first label row
-		lineIter = iter(f)
-		max = 0
-		for line in lineIter:
+		currentLine = 0 # counter for which line we are currently iterating over
+		maxNumberOfEntries = 10000
+		for line in f:
 			entry = line.strip().split(',')
 			rounded_entries = []
 			rounded_entries.append(int(float(entry[0])))
 
-
+			# use iterator to skip the first attribute, which is a class label
 			entryIter = iter(entry)
 			next(entryIter)
 			for e in entryIter:
@@ -40,12 +39,12 @@ def load_clean_instances(filename):
 				else:
 					rounded_entries.append("s")
 		
-			raw_instances.append(rounded_entries)
-			max = max + 1
-			if max == 10000:
+			instanceList.append(rounded_entries)
+			currentLine += 1
+			if currentLine == maxNumberOfEntries:
 				break
 
-	return raw_instances
+	return instanceList
 
 
 def entropy(instances):
@@ -218,7 +217,7 @@ def create_decision_tree(instances, candidate_attribute_indexes=None, class_inde
 
     return tree
 
-clean_instances = load_clean_instances('../HIGGS.csv')
+clean_instances = load_higgs_instances('../HIGGS.csv')
 
 # split instances into separate training and testing sets
 training_instances = clean_instances[:-500]
