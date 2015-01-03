@@ -22,7 +22,7 @@ def load_higgs_instances(filename):
 
 	with open(filename, 'r') as f:
 		currentLine = 0 # counter for which line we are currently iterating over
-		maxNumberOfEntries = 10000
+#		maxNumberOfEntries = 1000000
 		for line in f:
 			entry = line.strip().split(',')
 			rounded_entries = []
@@ -40,9 +40,9 @@ def load_higgs_instances(filename):
 					rounded_entries.append("s")
 		
 			instanceList.append(rounded_entries)
-			currentLine += 1
-			if currentLine == maxNumberOfEntries:
-				break
+#			currentLine += 1
+#			if currentLine == maxNumberOfEntries:
+#				break
 
 	return instanceList
 
