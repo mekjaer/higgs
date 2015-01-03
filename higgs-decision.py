@@ -25,23 +25,12 @@ def load_higgs_instances(filename):
 #		maxNumberOfEntries = 1000000
 		for line in f:
 			entry = line.strip().split(',')
-			rounded_entries = []
-			rounded_entries.append(int(float(entry[0])))
 
-			# use iterator to skip the first attribute, which is a class label
-			entryIter = iter(entry)
-			next(entryIter)
-			for e in entryIter:
-				round = int(float(e))
-				#print round
-				if round > 0:
-					rounded_entries.append("b")
-				else:
-					rounded_entries.append("s")
-		
-			instanceList.append(rounded_entries)
+			entry[0] = int(float(entry[0]))
+			instanceList.append(entry)
+
 #			currentLine += 1
-#			if currentLine == maxNumberOfEntries:
+#			if currentLine == 1000:
 #				break
 
 	return instanceList
@@ -137,7 +126,7 @@ def choose_best_attribute_index(instances, candidate_attribute_indexes, class_in
 def majority_value(instances, class_index=0):
   partitions = split_instances(instances, class_index)
   max = 0
-  for val in ("b","s"):   # should look up these values based on class_index using attribute_names_and_values
+  for val in (0,1):   # should look up these values based on class_index using attribute_names_and_values
     n = len(partitions[val])
     if n >= max:
       max = n
